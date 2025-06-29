@@ -266,10 +266,5 @@
     </div>
   </div>
 </body>
-<script>
-  // JavaScriptファイルを動的に読み込み（キャッシュ対策）
-  const scriptElement = document.createElement('script');
-  scriptElement.src = 'js/app.js?t=' + new Date().getTime();
-  document.body.appendChild(scriptElement);
-</script>
+<script src="js/app.js?t=" + new Date().getTime()></script>
 </html>
