@@ -105,8 +105,10 @@ function attendanceApp() {
     },
     
     clockOut() {
-      // 退勤時は所感入力フォームを表示
+      // 退勤時は所感入力フォームをモーダルで表示
       this.showMemoOnClockOut = true;
+      // モーダル表示時に背景スクロールを防止
+      document.body.style.overflow = 'hidden';
     },
     
     completeMemoAndClockOut() {
@@ -136,6 +138,8 @@ function attendanceApp() {
       
       this.memoText = '';
       this.showMemoOnClockOut = false;
+      // モーダルを閉じたらスクロールを戻す
+      document.body.style.overflow = '';
       this.saveToStorage();
     },
     
@@ -162,6 +166,8 @@ function attendanceApp() {
       }
       
       this.showMemoOnClockOut = false;
+      // モーダルを閉じたらスクロールを戻す
+      document.body.style.overflow = '';
       this.saveToStorage();
     },
     
@@ -184,7 +190,16 @@ function attendanceApp() {
       
       this.memoText = '';
       this.showMemo = false;
+      // モーダルを閉じたらスクロールを戻す
+      document.body.style.overflow = '';
       this.saveToStorage();
+    },
+    
+    // 所感モーダルを表示する関数
+    showMemoModal() {
+      this.showMemo = true;
+      // モーダル表示時に背景スクロールを防止
+      document.body.style.overflow = 'hidden';
     }
   }
 }

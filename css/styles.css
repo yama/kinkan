@@ -19,3 +19,37 @@
 .custom-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+
+/* モーダルオーバーレイ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+/* モーダルコンテンツ */
+.modal-content {
+  background-color: white;
+  border-radius: 1rem;
+  max-width: 90%;
+  width: 500px;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
