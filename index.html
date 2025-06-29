@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>カジュアル勤怠</title>
+  <!-- 注意: 本番環境ではCDNの代わりにPostCSSプラグインまたはTailwind CLIの使用が推奨されています -->
+  <!-- GitHub Pagesでの動作確認用にCDNを利用しています -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
   <script>
     // キャッシュ対策用のタイムスタンプを生成
     const timestamp = new Date().getTime();
-    
     // スタイルシートを動的に読み込み
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -123,27 +124,29 @@
           <p class="font-semibold text-gray-800" x-text="lastAction"></p>
         </div>
       </div>
-    </div>      <!-- メニューカード -->
-      <div class="grid grid-cols-2 gap-4 mb-8">
-        <button 
-          class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
-          @click="currentView = 'log'">
-          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span class="text-2xl">📋</span>
-          </div>
-          <p class="font-semibold text-gray-800">勤怠ログ</p>
-          <p class="text-xs text-gray-500 mt-1">記録を確認</p>
-        </button>
-        <button 
-          class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
-          @click="showMemoModal()">
-          <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span class="text-2xl">✏️</span>
-          </div>
-          <p class="font-semibold text-gray-800">所感を書く</p>
-          <p class="text-xs text-gray-500 mt-1">いつでも記録</p>
-        </button>
-      </div>
+    </div>
+    
+    <!-- メニューカード -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <button 
+        class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
+        @click="currentView = 'log'">
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <span class="text-2xl">📋</span>
+        </div>
+        <p class="font-semibold text-gray-800">勤怠ログ</p>
+        <p class="text-xs text-gray-500 mt-1">記録を確認</p>
+      </button>
+      <button 
+        class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
+        @click="showMemoModal()">
+        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <span class="text-2xl">✏️</span>
+        </div>
+        <p class="font-semibold text-gray-800">所感を書く</p>
+        <p class="text-xs text-gray-500 mt-1">いつでも記録</p>
+      </button>
+    </div>
     </div>
 
     <!-- 勤怠ログ画面 -->
@@ -180,9 +183,6 @@
         </template>
       </div>
     </div>
-
-
-
 
     <!-- 所感入力（モーダル） -->
     <div class="modal-overlay" x-show="showMemo" x-transition.opacity>
@@ -265,12 +265,11 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // JavaScriptファイルを動的に読み込み（キャッシュ対策）
-    const scriptElement = document.createElement('script');
-    scriptElement.src = 'js/app.js?t=' + new Date().getTime();
-    document.body.appendChild(scriptElement);
-  </script>
 </body>
+<script>
+  // JavaScriptファイルを動的に読み込み（キャッシュ対策）
+  const scriptElement = document.createElement('script');
+  scriptElement.src = 'js/app.js?t=' + new Date().getTime();
+  document.body.appendChild(scriptElement);
+</script>
 </html>

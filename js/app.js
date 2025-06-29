@@ -203,3 +203,4 @@ function attendanceApp() {
     }
   }
 }
+window.attendanceApp = attendanceApp;
