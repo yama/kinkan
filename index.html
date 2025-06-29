@@ -18,10 +18,14 @@
       <p class="text-sm">📅 本日: <span x-text="today"></span></p>
     </div>
 
-    <!-- 打刻ボタン -->
-    <div class="flex justify-between gap-4 mb-4">
-      <button class="flex-1 py-3 bg-green-500 text-white font-bold rounded-xl" @click="clockIn">🟢 出勤</button>
-      <button class="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl" @click="clockOut">🔴 退勤</button>
+    <!-- 出勤／退勤ボタン（交互表示） -->
+    <div class="flex justify-center mb-4">
+      <template x-if="!hasClockedIn">
+        <button class="px-6 py-3 bg-green-500 text-white font-bold rounded-xl" @click="clockIn">🟢 出勤</button>
+      </template>
+      <template x-if="hasClockedIn">
+        <button class="px-6 py-3 bg-red-500 text-white font-bold rounded-xl" @click="clockOut">🔴 退勤</button>
+      </template>
     </div>
 
     <!-- 最後の打刻 -->
@@ -62,19 +66,29 @@
         showLog: false,
         showMemo: false,
         memoText: '',
+        hasClockedIn: false,
         logs: [
           { date: '6/28（金）', in: '09:59', out: '18:13', memo: '今日は会議が多めの日でした' },
           { date: '6/27（木）', in: '10:15', out: '17:55', memo: '集中してタスク処理できた' }
         ],
         clockIn() {
-          this.lastAction = '出勤 ' + new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+          const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+          this.lastAction = '出勤 ' + time;
+          this.hasClockedIn = true;
+          this.logs.unshift({ date: this.today.split(' ')[0], in: time, out: '--:--', memo: '' });
         },
         clockOut() {
-          this.lastAction = '退勤 ' + new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+          const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+          this.lastAction = '退勤 ' + time;
+          this.hasClockedIn = false;
+          if (this.logs.length > 0 && this.logs[0].date === this.today.split(' ')[0]) {
+            this.logs[0].out = time;
+          }
         },
         saveMemo() {
-          const today = this.today.split(' ')[0];
-          this.logs.unshift({ date: today, in: '--:--', out: '--:--', memo: this.memoText });
+          if (this.logs.length > 0 && this.logs[0].date === this.today.split(' ')[0]) {
+            this.logs[0].memo = this.memoText;
+          }
           this.memoText = '';
           this.showMemo = false;
         }
