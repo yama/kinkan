@@ -6,91 +6,302 @@
   <title>カジュアル勤怠</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+            danger: '#EF4444',
+            light: '#F8FAFC',
+            warm: '#FEF3C7'
+          },
+          fontFamily: {
+            'sans': ['Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', 'Meiryo', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-800">
-  <div class="max-w-md mx-auto py-6 px-4" x-data="attendanceApp()">
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-gray-800 font-sans">
+  <div class="max-w-md mx-auto py-8 px-4" x-data="attendanceApp()">
     <!-- ヘッダー -->
-    <h1 class="text-2xl font-bold text-center mb-4">🕒 カジュアル勤怠</h1>
-
-    <!-- ユーザー情報と日付 -->
-    <div class="bg-white rounded-xl shadow p-4 mb-4">
-      <p class="text-sm">👤 ユーザー名: 山本さん</p>
-      <p class="text-sm">📅 本日: <span x-text="today"></span></p>
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg mb-4">
+        <span class="text-3xl">⏰</span>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">カジュアル勤怠</h1>
+      <p class="text-gray-600">シンプルで使いやすい勤怠管理</p>
     </div>
 
-    <!-- 出勤／退勤ボタン（交互表示） -->
-    <div class="flex justify-center mb-4">
+    <!-- ユーザー情報カード -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-100">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+            <span class="text-white text-xl font-bold">山</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">山本さん</p>
+            <p class="text-sm text-gray-500">おつかれさまです！</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-500">今日の日付</p>
+          <p class="font-semibold text-gray-800" x-text="today"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 出勤／退勤ボタン -->
+    <div class="mb-6">
       <template x-if="!hasClockedIn">
-        <button class="px-6 py-3 bg-green-500 text-white font-bold rounded-xl" @click="clockIn">🟢 出勤</button>
+        <button 
+          class="w-full py-6 bg-gradient-to-r from-secondary to-green-500 text-white font-bold rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95" 
+          @click="clockIn">
+          <div class="flex items-center justify-center space-x-3">
+            <span class="text-2xl">🌅</span>
+            <span class="text-xl">出勤する</span>
+          </div>
+        </button>
       </template>
       <template x-if="hasClockedIn">
-        <button class="px-6 py-3 bg-red-500 text-white font-bold rounded-xl" @click="clockOut">🔴 退勤</button>
+        <button 
+          class="w-full py-6 bg-gradient-to-r from-danger to-red-500 text-white font-bold rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95" 
+          @click="clockOut">
+          <div class="flex items-center justify-center space-x-3">
+            <span class="text-2xl">🌙</span>
+            <span class="text-xl">退勤する</span>
+          </div>
+        </button>
       </template>
     </div>
 
-    <!-- 最後の打刻 -->
-    <div class="bg-white rounded-xl shadow p-4 text-sm mb-4">
-      最後の打刻: <span x-text="lastAction"></span>
+    <!-- 最後の打刻ステータス -->
+    <div class="bg-white rounded-2xl shadow-lg p-4 mb-6 border border-gray-100">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-warm rounded-full flex items-center justify-center">
+          <span class="text-accent">📍</span>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">最後の打刻</p>
+          <p class="font-semibold text-gray-800" x-text="lastAction"></p>
+        </div>
+      </div>
     </div>
 
-    <!-- メニューリンク -->
-    <div class="grid grid-cols-2 gap-4">
-      <button class="bg-white rounded-xl shadow p-4 text-center" @click="showLog = !showLog">📄 勤怠ログ</button>
-      <button class="bg-white rounded-xl shadow p-4 text-center" @click="showMemo = !showMemo">📝 所感を書く</button>
+    <!-- メニューカード -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <button 
+        class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
+        @click="showLog = !showLog">
+        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <span class="text-2xl">�</span>
+        </div>
+        <p class="font-semibold text-gray-800">勤怠ログ</p>
+        <p class="text-xs text-gray-500 mt-1">記録を確認</p>
+      </button>
+      <button 
+        class="bg-white rounded-2xl shadow-lg p-6 text-center transform transition-all duration-200 hover:scale-105 active:scale-95 border border-gray-100" 
+        @click="showMemo = !showMemo">
+        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <span class="text-2xl">✏️</span>
+        </div>
+        <p class="font-semibold text-gray-800">所感を書く</p>
+        <p class="text-xs text-gray-500 mt-1">今日の振り返り</p>
+      </button>
     </div>
 
     <!-- 勤怠ログ -->
-    <div class="mt-6" x-show="showLog">
-      <h2 class="font-bold mb-2">📄 勤怠ログ一覧</h2>
-      <template x-for="item in logs" :key="item.date">
-        <div class="bg-white rounded-xl shadow p-4 mb-2 text-sm">
-          <div><strong x-text="item.date"></strong> 出勤: <span x-text="item.in"></span> / 退勤: <span x-text="item.out"></span></div>
-          <div x-show="item.memo">🌱 <span x-text="item.memo"></span></div>
+    <div class="mt-6" x-show="showLog" x-transition>
+      <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+            <span class="text-blue-600">�</span>
+          </div>
+          <h2 class="text-xl font-bold text-gray-800">勤怠ログ一覧</h2>
         </div>
-      </template>
+        
+        <div class="space-y-3">
+          <template x-for="item in logs" :key="item.date">
+            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <div class="flex justify-between items-start mb-2">
+                <p class="font-semibold text-gray-800" x-text="item.date"></p>
+                <div class="flex space-x-4 text-sm">
+                  <span class="text-secondary">📥 <span x-text="item.in"></span></span>
+                  <span class="text-danger">📤 <span x-text="item.out"></span></span>
+                </div>
+              </div>
+              <div x-show="item.memo" class="mt-2 p-2 bg-warm rounded-lg">
+                <p class="text-sm text-gray-700">💭 <span x-text="item.memo"></span></p>
+              </div>
+            </div>
+          </template>
+        </div>
+        
+        <button 
+          class="w-full mt-4 py-2 text-gray-600 text-sm border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+          @click="showLog = false">
+          閉じる
+        </button>
+      </div>
     </div>
 
     <!-- 所感入力 -->
-    <div class="mt-6" x-show="showMemo">
-      <h2 class="font-bold mb-2">📝 今日の所感</h2>
-      <textarea class="w-full p-2 border rounded mb-2" rows="3" x-model="memoText"></textarea>
-      <button class="w-full py-2 bg-blue-500 text-white rounded-xl" @click="saveMemo">💾 登録する</button>
+    <div class="mt-6" x-show="showMemo" x-transition>
+      <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+            <span class="text-amber-600">✏️</span>
+          </div>
+          <h2 class="text-xl font-bold text-gray-800">今日の所感</h2>
+        </div>
+        
+        <div class="space-y-4">
+          <textarea 
+            class="w-full p-4 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+            rows="4" 
+            x-model="memoText"
+            placeholder="今日はどんな一日でしたか？&#10;お疲れさまでした！"></textarea>
+          
+          <div class="flex space-x-3">
+            <button 
+              class="flex-1 py-3 bg-gradient-to-r from-primary to-blue-600 text-white font-semibold rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95" 
+              @click="saveMemo">
+              💾 保存する
+            </button>
+            <button 
+              class="px-6 py-3 text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              @click="showMemo = false">
+              キャンセル
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
     function attendanceApp() {
       return {
-        today: new Date().toLocaleDateString('ja-JP', { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' }),
-        lastAction: '未打刻',
+        today: new Date().toLocaleDateString('ja-JP', { 
+          weekday: 'short', 
+          year: 'numeric', 
+          month: '2-digit', 
+          day: '2-digit' 
+        }),
+        lastAction: '未打刻です',
         showLog: false,
         showMemo: false,
         memoText: '',
         hasClockedIn: false,
         logs: [
-          { date: '6/28（金）', in: '09:59', out: '18:13', memo: '今日は会議が多めの日でした' },
-          { date: '6/27（木）', in: '10:15', out: '17:55', memo: '集中してタスク処理できた' }
+          { 
+            date: '6/28（金）', 
+            in: '09:59', 
+            out: '18:13', 
+            memo: '今日は会議が多めの日でした。新しいプロジェクトのキックオフもあり充実していました。' 
+          },
+          { 
+            date: '6/27（木）', 
+            in: '10:15', 
+            out: '17:55', 
+            memo: '集中してタスク処理できた一日。明日の準備も完了！' 
+          },
+          { 
+            date: '6/26（水）', 
+            in: '09:45', 
+            out: '18:30', 
+            memo: '資料作成に時間をかけました。良いものができたと思います。' 
+          }
         ],
+        
+        init() {
+          // LocalStorageからデータを読み込み
+          const savedData = localStorage.getItem('attendanceData');
+          if (savedData) {
+            const data = JSON.parse(savedData);
+            this.logs = data.logs || this.logs;
+            this.hasClockedIn = data.hasClockedIn || false;
+            this.lastAction = data.lastAction || '未打刻です';
+          }
+        },
+        
+        saveToStorage() {
+          const data = {
+            logs: this.logs,
+            hasClockedIn: this.hasClockedIn,
+            lastAction: this.lastAction
+          };
+          localStorage.setItem('attendanceData', JSON.stringify(data));
+        },
+        
         clockIn() {
-          const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-          this.lastAction = '出勤 ' + time;
+          const time = new Date().toLocaleTimeString('ja-JP', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          });
+          this.lastAction = `出勤 ${time}`;
           this.hasClockedIn = true;
-          this.logs.unshift({ date: this.today.split(' ')[0], in: time, out: '--:--', memo: '' });
+          
+          const todayStr = this.today.split(' ')[0];
+          const existingLog = this.logs.find(log => log.date === todayStr);
+          
+          if (existingLog) {
+            existingLog.in = time;
+          } else {
+            this.logs.unshift({ 
+              date: todayStr, 
+              in: time, 
+              out: '--:--', 
+              memo: '' 
+            });
+          }
+          
+          this.saveToStorage();
         },
+        
         clockOut() {
-          const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
-          this.lastAction = '退勤 ' + time;
+          const time = new Date().toLocaleTimeString('ja-JP', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          });
+          this.lastAction = `退勤 ${time}`;
           this.hasClockedIn = false;
-          if (this.logs.length > 0 && this.logs[0].date === this.today.split(' ')[0]) {
-            this.logs[0].out = time;
+          
+          const todayStr = this.today.split(' ')[0];
+          const todayLog = this.logs.find(log => log.date === todayStr);
+          
+          if (todayLog) {
+            todayLog.out = time;
           }
+          
+          this.saveToStorage();
         },
+        
         saveMemo() {
-          if (this.logs.length > 0 && this.logs[0].date === this.today.split(' ')[0]) {
-            this.logs[0].memo = this.memoText;
+          if (!this.memoText.trim()) return;
+          
+          const todayStr = this.today.split(' ')[0];
+          const todayLog = this.logs.find(log => log.date === todayStr);
+          
+          if (todayLog) {
+            todayLog.memo = this.memoText.trim();
+          } else {
+            this.logs.unshift({ 
+              date: todayStr, 
+              in: '--:--', 
+              out: '--:--', 
+              memo: this.memoText.trim() 
+            });
           }
+          
           this.memoText = '';
           this.showMemo = false;
+          this.saveToStorage();
         }
       }
     }
