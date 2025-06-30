@@ -267,5 +267,11 @@
     </div>
   </div>
 </body>
-<script src="js/app.js?t=" + new Date().getTime()></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const scriptElement = document.createElement('script');
+    scriptElement.src = 'js/app.js?t=' + new Date().getTime();
+    document.body.appendChild(scriptElement);
+  });
+</script>
 </html>
