@@ -9,6 +9,7 @@
   <!-- GitHub Pagesでの動作確認用にCDNを利用しています -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
+  <script src="js/app.js"></script>
   <script>
     // キャッシュ対策用のタイムスタンプを生成
     const timestamp = new Date().getTime();
@@ -39,7 +40,7 @@
   </script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-gray-800 font-sans">
-  <div class="max-w-md mx-auto py-8 px-4" x-data="attendanceApp()">
+  <div class="max-w-md mx-auto py-8 px-4" x-data="attendanceApp">
     <!-- メイン画面 -->
     <div x-show="currentView === 'main'" x-transition>
       <!-- ヘッダー -->
@@ -268,10 +269,6 @@
   </div>
 </body>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const scriptElement = document.createElement('script');
-    scriptElement.src = 'js/app.js?t=' + new Date().getTime();
-    document.body.appendChild(scriptElement);
-  });
+  // app.jsはすでにhead内で読み込んでいるため削除
 </script>
 </html>

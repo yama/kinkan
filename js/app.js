@@ -203,4 +203,5 @@ function attendanceApp() {
     }
   }
 }
-window.attendanceApp = attendanceApp;
+// Alpine.jsで使用できるようにグローバル変数として登録
+window.attendanceApp = attendanceApp();
