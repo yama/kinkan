@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>認証ページ | カジュアル勤怠</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // kinkanクッキーの有無を判定し、あれば削除、なければ発行
+    var hasKinkan = document.cookie.split('; ').some(function(c) { return c.indexOf('kinkan=') === 0; });
+    if (hasKinkan) {
+      // クッキー削除（有効期限を過去に）
+      document.cookie = "kinkan=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+      window.__kinkanMode = 'deleted';
+    } else {
+      // クッキー発行（有効期限: 30日）
+      var d = new Date();
+      d.setTime(d.getTime() + (30*24*60*60*1000));
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = "kinkan=1; " + expires + "; path=/";
+      window.__kinkanMode = 'issued';
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center">
+  <div id="kinkanBox" class="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+    <!-- JSで内容を切り替え -->
+  </div>
+  <script>
+    var box = document.getElementById('kinkanBox');
+    if (window.__kinkanMode === 'deleted') {
+      box.innerHTML = `
+        <div class="mb-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+            <span class="text-3xl">🗑️</span>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-800 mb-2">kinkanクッキーを削除しました</h1>
+          <p class="text-gray-600">この端末の「kinkan」クッキーは削除されました。<br>再度認証が必要な場合はこのページをリロードしてください。</p>
+        </div>
+        <button id="goIndex" class="w-full py-4 bg-gradient-to-r from-gray-400 to-gray-600 text-white font-bold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 text-lg">
+          勤怠管理トップへ戻る
+        </button>
+      `;
+      document.getElementById('goIndex').addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    } else {
+      box.innerHTML = `
+        <div class="mb-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+            <span class="text-3xl">🔑</span>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-800 mb-2">簡易認証が完了しました</h1>
+          <p class="text-gray-600">「kinkan」クッキーを発行しました。<br>勤怠管理アプリにアクセスできるようになりました。<br>「勤怠管理をはじめる」ボタンを押してください。</p>
+        </div>
+        <button id="goKintai" class="w-full py-4 bg-gradient-to-r from-blue-400 to-blue-600 text-white font-bold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 text-lg">
+          勤怠管理をはじめる
+        </button>
+      `;
+      document.getElementById('goKintai').addEventListener('click', function() {
+        window.location.href = 'index.html';
+      });
+    }
+  </script>
+</body>
+</html>
