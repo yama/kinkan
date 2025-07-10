@@ -4,6 +4,9 @@
  */
 function attendanceApp() {
   return {
+    userName: '',
+    tempUserName: '',
+    showNameModal: false,
     currentView: 'main', // 'main' または 'log'
     today: new Date().toLocaleDateString('ja-JP', { 
       weekday: 'short', 
@@ -54,14 +57,41 @@ function attendanceApp() {
       }
     ],
     
+        get greetingMessage() {
+            const now = new Date();
+            const hour = now.getHours();
+            if (hour < 11) {
+                return 'おはようございます！';
+            } else if (hour < 18) {
+                return 'こんにちは';
+            } else {
+                return 'こんばんは';
+            }
+        },
+
     init() {
-      // LocalStorageからデータを読み込み
+      // 勤怠データの読み込み
       const savedData = localStorage.getItem('attendanceData');
       if (savedData) {
         const data = JSON.parse(savedData);
         this.logs = data.logs || this.logs;
         this.hasClockedIn = data.hasClockedIn || false;
         this.lastAction = data.lastAction || '未打刻です';
+      }
+      // ユーザー名の取得・初回入力
+      const savedName = localStorage.getItem('userName');
+      if (savedName) {
+        this.userName = savedName;
+      } else {
+        this.showNameModal = true;
+      }
+    },
+
+    saveUserName() {
+      if (this.tempUserName.trim()) {
+        this.userName = this.tempUserName.trim();
+        localStorage.setItem('userName', this.userName);
+        this.showNameModal = false;
       }
     },
     
