@@ -4,6 +4,20 @@
  */
 function attendanceApp() {
   return {
+    // ログ日付を「M/D（曜）」形式で表示する関数
+    formatLogDate(dateStr) {
+      // 既に「6/28（金）」形式ならそのまま返す
+      if (/^\d{1,2}\/\d{1,2}（.）$/.test(dateStr)) return dateStr;
+      // ISOや長い日付の場合は短縮
+      // 例: 2025/07/11(金) → 7/11（金）
+      // 例: 2025-07-11T00:00:00.000Z → 7/11（金）
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      const m = d.getMonth() + 1;
+      const day = d.getDate();
+      const week = '日月火水木金土'[d.getDay()];
+      return `${m}/${day}（${week}）`;
+    },
     userName: '',
     tempUserName: '',
     showNameModal: false,
@@ -56,6 +70,27 @@ function attendanceApp() {
         memo: '資料作成に時間をかけました。良いものができたと思います。' 
       }
     ],
+    showEditModal: false,
+    editLog: { in: '', out: '', memo: '', date: '' },
+    editLogIndex: null,
+    openEditModal(idx) {
+      const log = this.logs[idx];
+      this.editLog = { ...log };
+      this.editLogIndex = idx;
+      this.showEditModal = true;
+    },
+    saveEditLog() {
+      if (this.editLogIndex !== null) {
+        this.logs[this.editLogIndex] = { ...this.editLog };
+        if (typeof this.saveLogs === 'function') {
+          this.saveLogs();
+        } else {
+          // Fallback: localStorage保存
+          localStorage.setItem('attendanceData', JSON.stringify({ logs: this.logs }));
+        }
+        this.showEditModal = false;
+      }
+    },
     
         get greetingMessage() {
             const now = new Date();
