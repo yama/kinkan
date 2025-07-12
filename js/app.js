@@ -84,13 +84,34 @@ function attendanceApp() {
     },
     saveEditLog() {
       if (this.editLogIndex !== null) {
-        this.logs[this.editLogIndex] = { ...this.editLog };
-        if (typeof this.saveLogs === 'function') {
-          this.saveLogs();
+        // 日付が変更された場合は、ログを削除して新しい位置に挿入
+        const originalDate = this.logs[this.editLogIndex].date;
+        const newDate = this.editLog.date;
+        
+        if (originalDate !== newDate) {
+          // 元のログを削除
+          this.logs.splice(this.editLogIndex, 1);
+          
+          // 新しい日付で適切な位置に挿入（日付の降順を維持）
+          const newLog = { ...this.editLog };
+          let insertIndex = 0;
+          
+          // 新しい日付より新しいログの数を数える
+          for (let i = 0; i < this.logs.length; i++) {
+            if (this.logs[i].date > newDate) {
+              insertIndex = i + 1;
+            } else {
+              break;
+            }
+          }
+          
+          this.logs.splice(insertIndex, 0, newLog);
         } else {
-          // Fallback: localStorage保存
-          localStorage.setItem('attendanceData', JSON.stringify({ logs: this.logs }));
+          // 日付が変更されていない場合は、そのまま更新
+          this.logs[this.editLogIndex] = { ...this.editLog };
         }
+        
+        this.saveToStorage();
         this.showEditModal = false;
       }
     },
