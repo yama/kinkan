@@ -8,11 +8,19 @@ function attendanceApp() {
     formatLogDate(dateStr) {
       // 既に「6/28（金）」形式ならそのまま返す
       if (/^\d{1,2}\/\d{1,2}（.）$/.test(dateStr)) return dateStr;
-      // ISOや長い日付の場合は短縮
-      // 例: 2025/07/11(金) → 7/11（金）
-      // 例: 2025-07-11T00:00:00.000Z → 7/11（金）
-      const d = new Date(dateStr);
-      if (isNaN(d)) return dateStr;
+      
+      // 汎用的な日付形式をDateオブジェクトで処理
+      // ISO形式（YYYY-MM-DD）、YYYY/MM/DD、YYYY-MM-DD等に対応
+      const d = new Date(dateStr + 'T00:00:00'); // タイムゾーン対応
+      if (isNaN(d)) {
+        // fallback: 他の形式も試す
+        const d2 = new Date(dateStr);
+        if (isNaN(d2)) return dateStr;
+        const m = d2.getMonth() + 1;
+        const day = d2.getDate();
+        const week = '日月火水木金土'[d2.getDay()];
+        return `${m}/${day}（${week}）`;
+      }
       const m = d.getMonth() + 1;
       const day = d.getDate();
       const week = '日月火水木金土'[d.getDay()];
@@ -22,12 +30,7 @@ function attendanceApp() {
     tempUserName: '',
     showNameModal: false,
     currentView: 'main', // 'main' または 'log'
-    today: new Date().toLocaleDateString('ja-JP', { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: '2-digit', 
-      day: '2-digit' 
-    }),
+    today: new Date().toISOString().split('T')[0], // YYYY-MM-DD形式
     lastAction: '未打刻です',
     showLog: false,
     showMemo: false,
@@ -52,19 +55,19 @@ function attendanceApp() {
     ],
     logs: [
       { 
-        date: '6/28（金）', 
+        date: '2025-06-28', 
         in: '09:59', 
         out: '18:13', 
         memo: '今日は会議が多めの日でした。新しいプロジェクトのキックオフもあり充実していました。' 
       },
       { 
-        date: '6/27（木）', 
+        date: '2025-06-27', 
         in: '10:15', 
         out: '17:55', 
         memo: '集中してタスク処理できた一日。明日の準備も完了！' 
       },
       { 
-        date: '6/26（水）', 
+        date: '2025-06-26', 
         in: '09:45', 
         out: '18:30', 
         memo: '資料作成に時間をかけました。良いものができたと思います。' 
@@ -152,7 +155,7 @@ function attendanceApp() {
       this.clockInMessage = this.clockInMessages[randomIndex];
       this.showClockInMessage = true;
       
-      const todayStr = this.today.split(' ')[0];
+      const todayStr = this.today;
       const existingLog = this.logs.find(log => log.date === todayStr);
       
       if (existingLog) {
@@ -184,7 +187,7 @@ function attendanceApp() {
       this.lastAction = `退勤 ${time}`;
       this.hasClockedIn = false;
       
-      const todayStr = this.today.split(' ')[0];
+      const todayStr = this.today;
       const todayLog = this.logs.find(log => log.date === todayStr);
       
       if (todayLog) {
@@ -216,7 +219,7 @@ function attendanceApp() {
       this.lastAction = `退勤 ${time}`;
       this.hasClockedIn = false;
       
-      const todayStr = this.today.split(' ')[0];
+      const todayStr = this.today;
       const todayLog = this.logs.find(log => log.date === todayStr);
       
       if (todayLog) {
@@ -239,7 +242,7 @@ function attendanceApp() {
     saveMemo() {
       if (!this.memoText.trim()) return;
       
-      const todayStr = this.today.split(' ')[0];
+      const todayStr = this.today;
       const todayLog = this.logs.find(log => log.date === todayStr);
       
       if (todayLog) {
