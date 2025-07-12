@@ -42,18 +42,33 @@ CREATE TABLE team_members (
     FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- プロジェクトテーブル（フェーズ2で追加）
+CREATE TABLE projects (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    color_code VARCHAR(7) DEFAULT '#3B82F6' COMMENT 'UIカラー',
+    created_by BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (created_by) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- 勤怠データテーブル
 CREATE TABLE attendance (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
     team_id BIGINT UNSIGNED NOT NULL,
+    project_id BIGINT UNSIGNED NOT NULL,
     clock_in DATETIME NOT NULL,
     clock_out DATETIME,
     memo TEXT,
+    condition_emoji VARCHAR(10) COMMENT 'コンディション絵文字',
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (team_id) REFERENCES teams(id)
+    FOREIGN KEY (team_id) REFERENCES teams(id),
+    FOREIGN KEY (project_id) REFERENCES projects(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 
@@ -63,3 +78,7 @@ CREATE TABLE attendance (
 - **clock_in/clock_outはDATETIME型**: 日付またぎ勤務にも対応
 - **teamsテーブルのclosing_day**: チーム単位の締め日を設定（月末日超過時は自動調整）
 - **チーム・役割ベース**: ユーザーはチームごとに異なる役割を持つことが可能
+- **condition_emoji**: コンディションを絵文字で記録（😊😐😴🤒等）
+- **projectsテーブル**: プロジェクト管理機能（フェーズ2で追加）
+- **attendanceテーブルにproject_id**: 勤怠データをプロジェクト単位で管理
+- **color_code**: UIでのプロジェクト識別用カラー
