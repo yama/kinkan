@@ -11,13 +11,30 @@ Laravel移行も考慮したDB設計。
 -- ユーザーテーブル
 CREATE TABLE users (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255),
     display_name VARCHAR(100),
-    sso_provider VARCHAR(50),
-    sso_id VARCHAR(255),
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ゲストユーザーテーブル
+CREATE TABLE guest_users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    guest_token VARCHAR(255) UNIQUE NOT NULL COMMENT '仮アカウント用一意トークン',
+    display_name VARCHAR(100),
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- SSOアカウント紐付けテーブル（複数SSO対応）
+CREATE TABLE user_sso_accounts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    sso_provider VARCHAR(50) NOT NULL,
+    sso_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- チームテーブル
