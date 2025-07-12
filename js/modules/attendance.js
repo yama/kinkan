@@ -160,5 +160,22 @@ window.AttendanceManager = {
     }
     
     return logs;
+  },
+  
+  /**
+   * ログ削除処理
+   * @param {Array} logs - 勤怠ログ配列
+   * @param {number} deleteLogIndex - 削除するログのインデックス
+   * @returns {Array} 更新されたログ配列
+   */
+  deleteLog(logs, deleteLogIndex) {
+    if (deleteLogIndex === null || deleteLogIndex < 0 || deleteLogIndex >= logs.length) {
+      return logs;
+    }
+    
+    // 指定されたインデックスのログを削除
+    logs.splice(deleteLogIndex, 1);
+    
+    return logs;
   }
 };

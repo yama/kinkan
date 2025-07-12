@@ -25,6 +25,11 @@ function attendanceApp() {
     showEditModal: false,
     editLog: { in: '', out: '', memo: '', date: '' },
     editLogIndex: null,
+    showDeleteModal: false,
+    deleteTargetLog: null,
+    deleteLogIndex: null,
+    showSuccessMessage: false,
+    successMessage: '',
 
     // 日付フォーマット（AttendanceManagerに委譲）
     formatLogDate(dateStr) {
@@ -46,6 +51,36 @@ function attendanceApp() {
     },
     saveEditLog() {
       window.AttendanceList.saveEditLog(this);
+    },
+
+    openDeleteModal(idx) {
+      this.deleteLogIndex = idx;
+      this.deleteTargetLog = this.logs[idx];
+      this.showDeleteModal = true;
+    },
+
+    confirmDelete() {
+      if (this.deleteLogIndex !== null) {
+        const deletedLog = this.logs[this.deleteLogIndex];
+        this.logs = window.AttendanceManager.deleteLog(this.logs, this.deleteLogIndex);
+        window.StorageManager.saveAttendanceData({
+          logs: this.logs,
+          hasClockedIn: this.hasClockedIn,
+          lastAction: this.lastAction
+        });
+        
+        // 削除完了メッセージを表示
+        this.successMessage = `${this.formatLogDate(deletedLog.date)}の勤怠データを削除しました`;
+        this.showSuccessMessage = true;
+        
+        // 5秒後に自動で非表示
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 5000);
+      }
+      this.showDeleteModal = false;
+      this.deleteTargetLog = null;
+      this.deleteLogIndex = null;
     },
 
     clockIn() {
