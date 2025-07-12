@@ -36,7 +36,9 @@ function attendanceApp() {
     showMemo: false,
     showMemoOnClockOut: false,
     showClockInMessage: false,
+    showClockOutMessage: false,
     clockInMessage: '',
+    clockOutMessage: '',
     memoText: '',
     hasClockedIn: false,
     clockInMessages: [
@@ -52,6 +54,20 @@ function attendanceApp() {
       '今日は特別な日になりそうな予感です ✨',
       '集中できる環境を整えて、効率よく進めましょう 🏃‍♂️',
       '今日も学びのある一日にしていきましょう 📚'
+    ],
+    clockOutMessages: [
+      'お疲れさまでした！今日も一日がんばりましたね ⭐',
+      'ゆっくり休んで、明日に備えましょう 🌙',
+      '今日の成果を振り返って、自分を褒めてあげてください 🎉',
+      'お疲れさまです！美味しいご飯を食べてくださいね 🍽️',
+      '今日もよくがんばりました。リラックスタイムをお楽しみください 🛀',
+      'お疲れさまでした！家族や友人との時間を大切にしてくださいね 💝',
+      '今日の目標は達成できましたか？お疲れさまでした 🏆',
+      'ゆっくりと過ごして、心身ともにリフレッシュしてください 🌿',
+      'お疲れさまです！今日学んだことを大切にしてくださいね 📖',
+      '素敵な夕方・夜をお過ごしください。お疲れさまでした 🌅',
+      '今日もありがとうございました。ゆっくりお休みください 😴',
+      'お疲れさまでした！明日もよろしくお願いします 🤝'
     ],
     logs: [
       { 
@@ -125,6 +141,18 @@ function attendanceApp() {
                 return 'こんにちは';
             } else {
                 return 'こんばんは';
+            }
+        },
+
+        get clockOutGreetingMessage() {
+            const now = new Date();
+            const hour = now.getHours();
+            if (hour < 18) {
+                return 'お疲れさまでした！';
+            } else if (hour < 22) {
+                return 'お疲れさまでした！';
+            } else {
+                return '遅くまでお疲れさまでした！';
             }
         },
 
@@ -229,6 +257,11 @@ function attendanceApp() {
       this.showMemoOnClockOut = false;
       // モーダルを閉じたらスクロールを戻す
       document.body.style.overflow = '';
+      
+      // 退勤メッセージを表示
+      this.showClockOutMessage = true;
+      this.clockOutMessage = this.clockOutMessages[Math.floor(Math.random() * this.clockOutMessages.length)];
+      
       this.saveToStorage();
     },
     
@@ -257,6 +290,11 @@ function attendanceApp() {
       this.showMemoOnClockOut = false;
       // モーダルを閉じたらスクロールを戻す
       document.body.style.overflow = '';
+      
+      // 退勤メッセージを表示
+      this.showClockOutMessage = true;
+      this.clockOutMessage = this.clockOutMessages[Math.floor(Math.random() * this.clockOutMessages.length)];
+      
       this.saveToStorage();
     },
     

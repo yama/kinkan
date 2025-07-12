@@ -112,6 +112,26 @@
       </div>
     </div>
 
+    <!-- 退勤時のメッセージ -->
+    <div class="mb-4" x-show="showClockOutMessage" x-transition>
+      <div class="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl p-4 border border-blue-200">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center">
+            <span class="text-blue-600">🌙</span>
+          </div>
+          <div>
+            <p class="font-semibold text-blue-800" x-text="clockOutGreetingMessage"></p>
+            <p class="text-sm text-blue-700" x-text="clockOutMessage"></p>
+          </div>
+        </div>
+        <button 
+          class="mt-3 text-xs text-blue-600 hover:text-blue-800 transition-colors"
+          @click="showClockOutMessage = false">
+          ✕ 閉じる
+        </button>
+      </div>
+    </div>
+
     <!-- 出勤／退勤ボタン -->
     <div class="mb-6">
       <template x-if="!hasClockedIn">
