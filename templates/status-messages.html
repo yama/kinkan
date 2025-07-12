@@ -1,0 +1,39 @@
+<!-- 出勤時のメッセージ -->
+<div class="mb-4" x-show="showClockInMessage" x-transition>
+  <div class="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-4 border border-green-200">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
+        <span class="text-green-600">✨</span>
+      </div>
+      <div>
+        <p class="font-semibold text-green-800" x-text="greetingMessage"></p>
+        <p class="text-sm text-green-700" x-text="clockInMessage"></p>
+      </div>
+    </div>
+    <button 
+      class="mt-3 text-xs text-green-600 hover:text-green-800 transition-colors"
+      @click="showClockInMessage = false">
+      ✕ 閉じる
+    </button>
+  </div>
+</div>
+
+<!-- 退勤時のメッセージ -->
+<div class="mb-4" x-show="showClockOutMessage" x-transition>
+  <div class="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl p-4 border border-blue-200">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center">
+        <span class="text-blue-600">🌙</span>
+      </div>
+      <div>
+        <p class="font-semibold text-blue-800" x-text="clockOutGreetingMessage"></p>
+        <p class="text-sm text-blue-700" x-text="clockOutMessage"></p>
+      </div>
+    </div>
+    <button 
+      class="mt-3 text-xs text-blue-600 hover:text-blue-800 transition-colors"
+      @click="showClockOutMessage = false">
+      ✕ 閉じる
+    </button>
+  </div>
+</div>

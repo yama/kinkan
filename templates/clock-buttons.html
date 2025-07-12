@@ -1,0 +1,23 @@
+<!-- 出勤／退勤ボタン -->
+<div class="mb-6">
+  <template x-if="!hasClockedIn">
+    <button 
+      class="w-full py-6 bg-gradient-to-r from-secondary to-green-500 text-white font-bold rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95" 
+      @click="clockIn">
+      <div class="flex items-center justify-center space-x-3">
+        <span class="text-2xl">🌅</span>
+        <span class="text-xl">出勤する</span>
+      </div>
+    </button>
+  </template>
+  <template x-if="hasClockedIn">
+    <button 
+      class="w-full py-6 bg-gradient-to-r from-danger to-red-500 text-white font-bold rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95" 
+      @click="clockOut">
+      <div class="flex items-center justify-center space-x-3">
+        <span class="text-2xl">🌙</span>
+        <span class="text-xl">退勤する</span>
+      </div>
+    </button>
+  </template>
+</div>

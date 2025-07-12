@@ -1,0 +1,43 @@
+<!-- ヘッダー -->
+<div class="flex items-center mb-6">
+  <button 
+    class="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center mr-4"
+    @click="currentView = 'main'">
+    <span class="text-gray-600">←</span>
+  </button>
+  <div class="flex items-center space-x-3">
+    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+      <span class="text-blue-600">📋</span>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-800">勤怠ログ一覧</h1>
+  </div>
+</div>
+
+<div class="space-y-4">
+  <template x-for="(item, idx) in logs" :key="item.date">
+    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 relative">
+      <div class="flex justify-between items-start mb-3">
+        <p class="font-semibold text-gray-800 text-lg" x-text="formatLogDate(item.date)"></p>
+        <div class="flex items-center space-x-2">
+          <span class="text-secondary text-sm">📥 <span x-text="item.in"></span></span>
+          <span class="text-danger text-sm">📤 <span x-text="item.out"></span></span>
+          <!-- 編集・削除ボタンを時刻の右に配置 -->
+          <button 
+            class="ml-2 text-blue-500 hover:text-blue-700 text-xs px-2 py-0.5 rounded border border-blue-100 bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            @click="openEditModal(idx)">
+            編集
+          </button>
+          <button 
+            class="text-gray-400 border border-gray-100 bg-gray-50 text-xs px-2 py-0.5 rounded cursor-not-allowed"
+            disabled
+            title="削除機能は後日実装">
+            削除
+          </button>
+        </div>
+      </div>
+      <div x-show="item.memo" class="mt-3 p-3 bg-warm rounded-lg">
+        <p class="text-sm text-gray-700">💭 <span x-text="item.memo"></span></p>
+      </div>
+    </div>
+  </template>
+</div>
