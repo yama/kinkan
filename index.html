@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>カジュアル勤怠</title>
+  <title>勤怠さん</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <!-- 注意: 本番環境ではCDNの代わりにPostCSSプラグインまたはTailwind CLIの使用が推奨されています -->
   <!-- GitHub Pagesでの動作確認用にCDNを利用しています -->
@@ -46,7 +46,7 @@
         <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-lg mb-4">
           <span class="text-3xl">⏰</span>
         </div>
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">カジュアル勤怠（試作）</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">勤怠さん</h1>
         <p class="text-gray-600">シンプルで使いやすい勤怠管理</p>
       </div>
 
@@ -343,6 +343,13 @@
   </div>
   
   <!-- スクリプト -->
+  <script src="js/config.js"></script>
+  <script src="js/modules/storage.js"></script>
+  <script src="js/modules/ui.js"></script>
+  <script src="js/modules/attendance.js"></script>
+  <script src="js/components/clock-widget.js"></script>
+  <script src="js/components/attendance-list.js"></script>
+  <script src="js/components/condition-selector.js"></script>
   <script src="js/app.js"></script>
   <script src="https://unpkg.com/alpinejs"></script>
 </body>
