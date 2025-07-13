@@ -17,12 +17,8 @@ window.ClockWidget = {
     app.clockInMessage = result.clockInMessage;
     app.showClockInMessage = true;
     
-    // ストレージに保存
-    window.StorageManager.saveAttendanceData({
-      logs: app.logs,
-      hasClockedIn: app.hasClockedIn,
-      lastAction: app.lastAction
-    });
+    // TODO: サーバーに出勤データを送信（フェーズ2で実装）
+    console.log('出勤しました:', result);
   },
 
   /**
@@ -53,12 +49,8 @@ window.ClockWidget = {
     app.showClockOutMessage = true;
     window.UIManager.restoreBodyScroll();
     
-    // ストレージに保存
-    window.StorageManager.saveAttendanceData({
-      logs: app.logs,
-      hasClockedIn: app.hasClockedIn,
-      lastAction: app.lastAction
-    });
+    // TODO: サーバーに退勤データを送信（フェーズ2で実装）
+    console.log('退勤しました（メモ付き）:', {logs: app.logs, hasClockedIn: app.hasClockedIn, lastAction: app.lastAction});
   },
 
   /**
@@ -79,11 +71,7 @@ window.ClockWidget = {
     app.showClockOutMessage = true;
     window.UIManager.restoreBodyScroll();
     
-    // ストレージに保存
-    window.StorageManager.saveAttendanceData({
-      logs: app.logs,
-      hasClockedIn: app.hasClockedIn,
-      lastAction: app.lastAction
-    });
+    // TODO: サーバーに退勤データを送信（フェーズ2で実装）
+    console.log('退勤しました（メモなし）:', {logs: app.logs, hasClockedIn: app.hasClockedIn, lastAction: app.lastAction});
   }
 };

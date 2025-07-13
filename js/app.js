@@ -63,11 +63,8 @@ function attendanceApp() {
       if (this.deleteLogIndex !== null) {
         const deletedLog = this.logs[this.deleteLogIndex];
         this.logs = window.AttendanceManager.deleteLog(this.logs, this.deleteLogIndex);
-        window.StorageManager.saveAttendanceData({
-          logs: this.logs,
-          hasClockedIn: this.hasClockedIn,
-          lastAction: this.lastAction
-        });
+        // TODO: サーバーに削除リクエストを送信（フェーズ2で実装）
+        console.log('勤怠データを削除しました:', deletedLog);
         
         // 削除完了メッセージを表示
         this.successMessage = `${this.formatLogDate(deletedLog.date)}の勤怠データを削除しました`;
@@ -110,34 +107,47 @@ function attendanceApp() {
     // 初期化処理
     async init() {
       try {
-        // テンプレートを最初に読み込み（必須）
+        // 1. 一時ユーザーの初期化（クッキー発行）
+        await this.initializeUser();
+        
+        // 2. テンプレートを読み込み
         await this.loadTemplates();
         
-        // テンプレート読み込み後にデータを読み込み
+        // 3. テンプレート読み込み後にデータを読み込み
         this.loadBasicData();
       } catch (error) {
         console.error('アプリケーションの初期化に失敗しました:', error);
-        this.showError('テンプレートの読み込みに失敗しました。ページを再読み込みしてください。');
+        this.showError('アプリケーションの初期化に失敗しました。ページを再読み込みしてください。');
       }
+    },
+
+    // ユーザー初期化処理
+    async initializeUser() {
+      if (!window.UserManager) {
+        console.warn('UserManager モジュールが読み込まれていません');
+        return;
+      }
+
+      const success = await window.UserManager.initializeTemporaryUser();
+      if (!success) {
+        console.warn('一時ユーザーの初期化に失敗しましたが、ローカルモードで続行します');
+      }
+
+      // ユーザー情報をログ出力（デバッグ用）
+      const userInfo = window.UserManager.getCurrentUserInfo();
+      console.log('現在のユーザー情報:', userInfo);
     },
 
     // 基本データの読み込み
     loadBasicData() {
-      // 勤怠データの読み込み
-      const savedData = window.StorageManager?.loadAttendanceData();
-      if (savedData) {
-        this.logs = savedData.logs || this.logs;
-        this.hasClockedIn = savedData.hasClockedIn || false;
-        this.lastAction = savedData.lastAction || '未打刻です';
-      }
+      // フェーズ1ではサンプルデータを使用（ローカルストレージ不使用）
+      // TODO: フェーズ2でサーバーからデータ取得
+      this.logs = window.AppConfig.SAMPLE_LOGS;
+      this.hasClockedIn = false;
+      this.lastAction = '未打刻です';
       
-      // ユーザー名の取得・初回入力
-      const savedName = window.StorageManager?.loadUserName();
-      if (savedName) {
-        this.userName = savedName;
-      } else {
-        this.showNameModal = true;
-      }
+      // ユーザー名の初回入力（サーバー連携前）
+      this.showNameModal = true;
     },
 
     // テンプレート読み込み処理（必須）
@@ -184,7 +194,8 @@ function attendanceApp() {
     saveUserName() {
       if (this.tempUserName.trim()) {
         this.userName = this.tempUserName.trim();
-        window.StorageManager.saveUserName(this.userName);
+        // TODO: サーバーにユーザー名を送信（フェーズ2で実装）
+        console.log('ユーザー名を設定:', this.userName);
         this.showNameModal = false;
       }
     }

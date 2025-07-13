@@ -22,12 +22,8 @@ window.AttendanceList = {
   saveEditLog(app) {
     app.logs = window.AttendanceManager.saveEditLog(app.logs, app.editLogIndex, app.editLog);
     
-    // ストレージに保存
-    window.StorageManager.saveAttendanceData({
-      logs: app.logs,
-      hasClockedIn: app.hasClockedIn,
-      lastAction: app.lastAction
-    });
+    // TODO: サーバーに編集データを送信（フェーズ2で実装）
+    console.log('勤怠データを編集しました:', app.editLog);
     
     app.showEditModal = false;
   },
@@ -53,11 +49,7 @@ window.AttendanceList = {
     app.showMemo = false;
     window.UIManager.restoreBodyScroll();
     
-    // ストレージに保存
-    window.StorageManager.saveAttendanceData({
-      logs: app.logs,
-      hasClockedIn: app.hasClockedIn,
-      lastAction: app.lastAction
-    });
+    // TODO: サーバーにメモデータを送信（フェーズ2で実装）
+    console.log('メモを保存しました:', app.memoText);
   }
 };

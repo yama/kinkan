@@ -3,10 +3,9 @@
  * 定数値やメッセージ、API エンドポイントなどの設定値を管理
  */
 window.AppConfig = {
-  // ローカルストレージキー
+  // 設定キー（クッキー用）
   STORAGE_KEYS: {
-    ATTENDANCE_DATA: 'attendanceData',
-    USER_NAME: 'userName'
+    TEMP_USER_ID: 'tempUserId'
   },
 
   // 出勤時メッセージ
@@ -61,5 +60,17 @@ window.AppConfig = {
       out: '18:30', 
       memo: '資料作成に時間をかけました。良いものができたと思います。' 
     }
-  ]
+  ],
+
+  // API設定
+  API: {
+    BASE_URL: '/api/v1',
+    ENDPOINTS: {
+      CREATE_TEMPORARY_USER: '/user/temporary',
+      ATTENDANCE_LIST: '/attendance',
+      ATTENDANCE_CREATE: '/attendance',
+      ATTENDANCE_UPDATE: '/attendance/{id}',
+      ATTENDANCE_DELETE: '/attendance/{id}'
+    }
+  }
 };

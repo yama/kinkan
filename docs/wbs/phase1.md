@@ -13,7 +13,7 @@
   - [x] users + temporary_usersテーブル設計
   - [x] API設計（フェーズ1範囲：api-specifications-phase1.md）
   - [x] group_id NULL設計の確認（ダミーグループ不要）
-  - [ ] クッキー発行タイミングの実装（初回アクセス時）
+  - [x] クッキー発行タイミングの実装（初回アクセス時）
   - [ ] 一時ユーザー作成API実装
   - [ ] 勤怠データCRUD API実装
   - [ ] フロントエンド→API連携実装
