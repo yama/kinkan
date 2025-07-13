@@ -27,7 +27,7 @@ CREATE TABLE users (
 -- 一時ユーザーテーブル（temporary_users）
 CREATE TABLE temporary_users (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    users_id BIGINT UNSIGNED NULL COMMENT '昇格後のusersテーブルID',
+    users_id BIGINT UNSIGNED NOT NULL COMMENT 'この一時ユーザーに対応するusersテーブルID（is_temporary=TRUE）',
     identifier VARCHAR(255) UNIQUE COMMENT 'クッキー連携用一意識別子',
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
@@ -75,6 +75,10 @@ CREATE TABLE attendance (
 
 ## 設計ポイント
 
+- **一時ユーザー管理**: 一時ユーザーも users テーブルに登録（is_temporary=TRUE で区別）
+- **temporary_users テーブル**: クッキー識別子管理用の補助テーブル
+- **勤怠データ一元管理**: attendance テーブルは users.id で一元管理
+- **昇格処理**: 昇格時は users.is_temporary を FALSE に変更
 - **memoはTEXT型**: 余裕を持たせ、日本語運用のためutf8mb4_general_ciを指定
 - **clock_in/clock_outはDATETIME型**: 日付またぎ勤務にも対応
 - **groupsテーブルのclosing_day**: グループ単位の締め日を設定（月末日超過時は自動調整）
