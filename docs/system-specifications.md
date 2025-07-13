@@ -29,10 +29,10 @@
 - 勤怠データ（attendance）は users.id で一元管理
 - 昇格時は users.is_temporary を FALSE に変更
 
-#### ダミーグループ運用
+#### グループID管理
 
-- 勤怠データの group_id は NOT NULL
-- 未所属の場合は group_id=0（ダミーグループID）をセット
+- 勤怠データの group_id は NULL許可
+- 未所属の場合は group_id=NULL（個人利用）をセット
 
 #### データ操作
 
