@@ -20,12 +20,14 @@
 ## 🛠️ 技術スタック
 
 ### フロントエンド
+
 - HTML5
 - Tailwind CSS（CDN経由）
 - Alpine.js（CDN経由）
 - JavaScript（ES6+）
 
 ### バックエンド
+
 - PHP 8.0+
 - MySQL 8.0+
 - REST API（JSON形式）
@@ -45,8 +47,20 @@ kinkan/
 │   ├── database-schema.md
 │   ├── development-phases.md
 │   └── coding-standards.md
-├── api/               # PHP API (フェーズ2以降)
-├── database/          # データベース設定 (フェーズ2以降)
+├── api/               # PHP API（フェーズ1実装済み）
+│   ├── v1/
+│   │   └── user/
+│   │       └── temporary.php  # 一時ユーザー作成API
+│   ├── .htaccess     # APIルーティング設定
+│   └── test.html     # APIテスト用ページ
+├── includes/          # 共通クラス・ユーティリティ
+│   ├── Database.php
+│   ├── ApiHelper.php
+│   └── TemporaryUserManager.php
+├── config/            # 設定ファイル
+│   └── database.php
+├── database/          # データベーススキーマ
+│   └── create_tables.sql
 └── favicon.svg        # ファビコン
 ```
 
@@ -88,15 +102,20 @@ CREATE TABLE attendance (
 ## 🚀 開発フェーズ
 
 ### フェーズ1: 基本機能（現在）
+
 - ✅ 勤怠データの入力・編集・削除
 - ✅ アカウントなしでも利用可能（ゲスト運用）
 - ✅ DBによるデータ保存・管理
 - ✅ レスポンシブUI
 - ✅ データ一覧表示・簡易集計
+- ✅ 一時ユーザー作成API実装
+- 🔲 勤怠データCRUD API実装
+- 🔲 フロントエンド→API連携実装
 
 ### フェーズ2: アカウント・DB連携
+
 - 🔲 アカウント作成・ログイン画面
-- 🔲 PHP + MySQL API実装
+- ✅ PHP + MySQL API基盤実装
 - 🔲 SSO認証機能
 - 🔲 エラーハンドリング強化
 - 🔲 管理者向け画面
@@ -108,6 +127,39 @@ CREATE TABLE attendance (
 - 🔲 ドキュメント整備
 
 ## 🎯 使用方法
+
+### データベースセットアップ（フェーズ1 API使用時）
+
+#### Sakuraサーバー（本番環境）
+
+1. データベース接続テストを実行：
+```
+http://your-server/api/db-test.php
+```
+
+2. テーブルが不足している場合、以下のSQLを実行：
+```sql
+-- database/create_tables_sakura.sql の内容をphpMyAdminまたはMySQLクライアントで実行
+```
+
+3. APIテストページでテスト：
+```
+http://your-server/api/test.html
+```
+
+#### ローカル開発環境
+
+1. MySQLデータベースを作成：
+```sql
+-- database/create_tables.sql を実行
+mysql -u root -p < database/create_tables.sql
+```
+
+2. データベース設定ファイルをコピー：
+```bash
+cp .env.example .env
+# .env ファイルを編集してDB接続情報を設定
+```
 
 ### 開発環境での起動
 

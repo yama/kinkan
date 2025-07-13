@@ -1,1 +1,18 @@
 .memo
+
+# 環境設定ファイル
+.env
+config/database.php
+
+# ログファイル
+*.log
+error.log
+
+# 一時ファイル
+tmp/
+temp/
+
+# テスト・開発用ファイル（本番には不要）
+api/test.html
+api/db-test.php
+api/check-tables.php

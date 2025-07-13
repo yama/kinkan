@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# CORS対応
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, X-CSRF-Token"
+
+# OPTIONSリクエストへの対応
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# APIルーティング
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# 一時ユーザー作成API
+RewriteRule ^v1/user/temporary/?$ v1/user/temporary.php [L,QSA]
+
+# 勤怠データAPI（今後実装予定）
+RewriteRule ^v1/attendance/?$ v1/attendance/index.php [L,QSA]
+RewriteRule ^v1/attendance/([0-9]+)/?$ v1/attendance/detail.php?id=$1 [L,QSA]
