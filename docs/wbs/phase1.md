@@ -15,6 +15,28 @@
   - [x] group_id NULL設計の確認（ダミーグループ不要）
   - [x] クッキー発行タイミングの実装（初回アクセス時）
   - [x] 一時ユーザー作成API実装
+  - [ ] PHP処理層構造のリファクタリング
+    - [ ] パス管理の改善（定数ベース）
+      - [ ] config/paths.php 作成
+      - [ ] bootstrap/app.php 作成
+    - [ ] 基底クラスの実装
+      - [ ] includes/models/BaseModel.php 作成
+      - [ ] includes/controllers/BaseController.php 作成
+    - [ ] マイグレーション管理システム（詳細：migration-system.md）
+      - [ ] includes/Migration.php 作成
+      - [ ] cli/migrate.php CLIコマンド作成
+      - [ ] database/migrations/ ディレクトリ作成
+      - [ ] 既存テーブル定義のマイグレーション化
+    - [ ] 一時ユーザーAPIのリファクタリング
+      - [ ] includes/models/User.php 作成
+      - [ ] includes/models/TemporaryUser.php 作成
+      - [ ] includes/services/UserService.php 作成
+      - [ ] includes/validators/UserValidator.php 作成
+      - [ ] includes/controllers/UserController.php 作成
+    - [ ] APIルーティングの簡素化
+      - [ ] .htaccess の簡素化
+      - [ ] api/index.php 統一ルーター作成
+    - ⏱️ 目安工数：1.5日
   - [ ] 勤怠データCRUD API実装
   - [ ] フロントエンド→API連携実装
   - [ ] エラーハンドリング実装
